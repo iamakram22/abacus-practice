@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Abacus Practice Tool</title>
+    <link rel="stylesheet" href="assets/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <noscript>
+        <div class="alert alert-danger" style="padding: 20px; position:absolute; top: 100px;left: 100px;">
+            <p>You need <strong style="font-size:1.2em;">javascript</strong> to be turned <strong>on</strong> for this to work !</p>
+        </div>
+    </noscript>
+
+    <div id="main">
+        <div id="display" class="d-flex justify-content-center align-items-center position-relative">
+            <div class="number text-center">
+                <!-- Numbers -->
+                <span id="numbers"></span>
+                <span id="message"></span>
+            </div>
+        </div>
+
+        <button id="history-btn" class="btn btn-outline-dark position-absolute disabled-element" type="button" data-bs-toggle="offcanvas" data-bs-target="#history" aria-controls="historyToggle" disabled>
+            History
+        </button>
+
+        <!-- Controls -->
+        <div id="controls" class="d-flex flex-wrap position-absolute bottom-0 start-0 end-0">
+            <div class="col col-lg-3 col-8 order-lg-1 order-2">
+                <button type="button" id="play" class="btn btn-success primary">Play</button>
+                <button type="button" id="replay" class="disabled-element btn btn-secondary mx-2" disabled>Replay</button>
+            </div>
+            <div class="col col-lg-5 col-12 order-lg-2 order-1">
+                <div class="input-group">
+                    <label class="input-group-text" for="yourAnswer">Your answer</label>
+                    <input type="number" class="disabled-element form-control" id="yourAnswer" disabled>
+                    <button type="button" id="check" class="disabled-element btn btn-success" disabled>check</button>
+                </div>
+            </div>
+            <div class="col col-lg-4 col-4 text-end order-lg-3 order-3">
+                <!-- <button type="button" id="settings" class="btn btn-outline-dark">Settings</button> -->
+                <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#settings">
+                    Settings
+                  </button>
+            </div>
+            <div class="col col-12 order-4 py-2 text-center">
+                Tool Developed by <a href="https://hashtagweb.in" target="_blank">Hashtagweb.in</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings -->
+    <div class="modal fade" id="settings" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-keyboard="false" data-bs-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Settings</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="setting_form">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text col-9">Number of Digits</span>
+                        <input type="number" id="digits" class="form-control col-3 text-center" min="1" max="9" value="1" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text col-9">Number of Rows</span>
+                        <input type="number" id="rows" class="form-control col-3 text-center" min="2" max="10" value="5" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text col-9">Time between numbers (ms)</span>
+                        <input type="number" id="time" class="form-control col-3 text-center" min="1000" max="5000" step="500" value="1000" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text col-9">Include Subtractions</span>
+                        <div class="form-control col-3 text-center">
+                            <input class="form-check-input" type="checkbox" value="" id="subtractions">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" id="settings_save" class="btn btn-success" data-bs-dismiss="modal">Save changes</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="history" aria-labelledby="historyContainer">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">History</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="entries">
+        </div>
+    </div>
+
+
+    <script src="assets/bootstrap.min.js"></script>
+    <script src="assets/jquery.min.js"></script>
+    <script src="assets/jquery.validate.min.js"></script>
+    <script src="script.js"></script>
+    <script src="script.min.js"></script>
+  </body>
+</html>
