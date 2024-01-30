@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Abacus Practice Tool</title>
     <link rel="stylesheet" href="assets/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.min.css">
   </head>
   <body>
     <noscript>
@@ -14,13 +14,11 @@
         </div>
     </noscript>
 
-    <div id="main">
-        <div id="display" class="d-flex justify-content-center align-items-center position-relative">
-            <div class="number text-center">
-                <!-- Numbers -->
-                <span id="numbers"></span>
-                <span id="message"></span>
-            </div>
+    <section id="main">
+        <div id="display" class="d-flex justify-content-center align-items-center position-relative text-center">
+            <!-- Numbers -->
+            <div id="numbers"></div>
+            <div id="message"></div>
         </div>
 
         <button id="history-btn" class="btn btn-outline-dark position-absolute disabled-element" type="button" data-bs-toggle="offcanvas" data-bs-target="#history" aria-controls="historyToggle" disabled>
@@ -30,13 +28,13 @@
         <!-- Controls -->
         <div id="controls" class="d-flex flex-wrap position-absolute bottom-0 start-0 end-0">
             <div class="col col-lg-3 col-8 order-lg-1 order-2">
-                <button type="button" id="play" class="btn btn-success primary">Play</button>
+                <button type="button" id="play" class="disabled-element btn btn-success primary">Play</button>
                 <button type="button" id="replay" class="disabled-element btn btn-secondary mx-2" disabled>Replay</button>
             </div>
             <div class="col col-lg-5 col-12 order-lg-2 order-1">
                 <div class="input-group">
                     <label class="input-group-text" for="yourAnswer">Your answer</label>
-                    <input type="number" class="disabled-element form-control" id="yourAnswer" disabled>
+                    <input type="text" inputmode="numeric" class="disabled-element form-control" id="yourAnswer" disabled>
                     <button type="button" id="check" class="disabled-element btn btn-success" disabled>check</button>
                 </div>
             </div>
@@ -46,11 +44,11 @@
                     Settings
                   </button>
             </div>
-            <div class="col col-12 order-4 py-2 text-center">
+            <div class="col col-12 order-4 pt-2 text-center">
                 Tool Developed by <a href="https://hashtagweb.in" target="_blank">Hashtagweb.in</a>
             </div>
         </div>
-    </div>
+    </section>
 
     <!-- Settings -->
     <div class="modal fade" id="settings" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-keyboard="false" data-bs-backdrop="static">
@@ -80,6 +78,12 @@
                             <input class="form-check-input" type="checkbox" value="" id="subtractions">
                         </div>
                     </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text col-9">Speak Numbers</span>
+                        <div class="form-control col-3 text-center">
+                            <input class="form-check-input" type="checkbox" value="" id="speak">
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -104,7 +108,6 @@
     <script src="assets/bootstrap.min.js"></script>
     <script src="assets/jquery.min.js"></script>
     <script src="assets/jquery.validate.min.js"></script>
-    <script src="script.js"></script>
     <script src="script.min.js"></script>
   </body>
 </html>
