@@ -38,7 +38,10 @@ This is a simple tool to practice abacus calculations that displays random numbe
 ## Contributors
 - [Mohd Akram](https://www.github.com/iamakram22)
 
-For additional support and documentation, please visit [the GitHub repository](https://github.com/iamakram22/abacus-practice).
+## Organization
+[![Logo](https://hashtagweb.in/wp-content/uploads/2021/09/hashtag-logo-cropped-min.svg)](https://hashtagweb.in)
+
+For additional support and documentation, please visit the [GitHub repository](https://github.com/iamakram22/abacus-practice).
 
 Feel free to contribute, provide feedback, or report issues – your collaboration is appreciated!
 
