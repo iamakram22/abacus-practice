@@ -26,7 +26,7 @@ This is a simple tool to practice abacus calculations that displays random numbe
 ![Settings](/assets/images/settings-screenshot.jpg)
 ![History](/assets/images/history-screenshot.jpg)
 
-## Libraries Used
+## Libraries and APIs Used
 
 - [jQuery](https://jquery.com/): For DOM manipulation and event handling.
 - [jQuery Validate](https://jqueryvalidation.org/): For validating settings.
