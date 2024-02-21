@@ -19,6 +19,8 @@ $(document).ready(function(){
      */
     const controls_height = $('#controls').outerHeight();
     $('#display').css('height', `calc(100svh - ${controls_height}px)`);
+    const colors = ['#1a1a1a', '#ff5d52', '#fedc09', '#b1c642', '#68b9d8', '#023047', '#fb8500', '#e63946', '#588157', '#8338ec'];
+    const colorsLength = colors.length;
 
     
     /**
@@ -91,22 +93,15 @@ $(document).ready(function(){
         beforeShowNumber();
         if (game.currentIndex < game.numbers.length) {
             numberContainer.fadeIn().text(game.numbers[game.currentIndex]);
-            game.currentIndex++;
+            let i = Math.floor(Math.random() * colorsLength);
+            numberContainer.css('color', colors[i]);
+            if(settings.speakNumbers) {
+                convertSpeech(game.numbers[game.currentIndex]);
+            } else {
+                game.currentIndex++;
+            }
         } else {
             clearInterval(game.playnum);
-            afterShowNumber();
-        }
-    }
-
-    /**
-     * Display numbers and speak
-     */
-    function displayNumbersSpeak() {
-        beforeShowNumber();
-        if (game.currentIndex < game.numbers.length) {
-            numberContainer.fadeIn().text(game.numbers[game.currentIndex]);
-            convertSpeech(game.numbers[game.currentIndex]);
-        } else {
             afterShowNumber();
         }
     }
@@ -124,6 +119,7 @@ $(document).ready(function(){
      * Modification after showing number
      */
     function afterShowNumber() {
+        numberContainer.css('color', colors[0]);
         numberContainer.fadeIn().text('?');
         disabledElement.prop('disabled', false);
         yourAnswer.focus();
@@ -156,7 +152,7 @@ $(document).ready(function(){
         game.entryAdded = false;
         yourAnswer.val('');
         if(settings.speakNumbers) {
-            displayNumbersSpeak();
+            displayNumbers();
         } else {
             game.playnum = setInterval(displayNumbers, settings.timeInterval);
         }
@@ -169,7 +165,7 @@ $(document).ready(function(){
         game.currentIndex = 0;
         yourAnswer.val('')
         if(settings.speakNumbers) {
-            displayNumbersSpeak();
+            displayNumbers();
         } else {
             game.playnum = setInterval(displayNumbers, settings.timeInterval);
         }
@@ -211,7 +207,7 @@ $(document).ready(function(){
             speakUtterance.onend = function() {
                 game.currentIndex++;
                 if (game.currentIndex <= game.numbers.length) {
-                    setTimeout(displayNumbersSpeak, settings.timeInterval);
+                    setTimeout(displayNumbers, settings.timeInterval);
                 }
             }
         }

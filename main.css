@@ -37,7 +37,7 @@ button.primary:hover, button.primary:active, button.primary:focus {
 
 #numbers {
     display: block;
-    font-size: 10rem;
+    font-size: 20rem;
     font-weight: bold;
     line-height: 1;
     word-break: break-word;
