@@ -69,12 +69,18 @@ $(document).ready(function(){
      * Generates random numbers based on settings
      */
     function generateRandomNumbers() {
-        game.numbers = Array.from({ length: settings.numRows }, () => {
-            let number = '';
-            for (let i = 0; i < settings.numDigits; i++) {
-                number += Math.floor(Math.random() * 10);
-            }
-            return settings.includeSubtractions && Math.random() < 0.5 ? -parseInt(number) : parseInt(number);
+        game.numbers = Array.from({ length: settings.numRows }, (_, index) => {
+            const positiveNumber = () => {
+                let number = '';
+                for (let i = 0; i < settings.numDigits; i++) {
+                    number += Math.floor(Math.random() * 10);
+                }
+                return parseInt(number);
+            };
+    
+            const randomNumber = settings.includeSubtractions && Math.random() < 0.5 && index > 0 ? -positiveNumber() : positiveNumber();
+    
+            return randomNumber;
         });
     }
 
@@ -84,6 +90,16 @@ $(document).ready(function(){
      */
     function updateCurrentSum() {
         game.currentAnswer = game.numbers.reduce((acc, num) => acc + num, 0);
+
+        // If sum is negative then switch numbers prefix randomly
+        if(game.currentAnswer < 0) {
+            game.numbers = game.numbers.map((e, i) => {
+                return Math.random() < 0.5 && i > 0 ? parseInt(e) * -1 : parseInt(e);
+            });
+
+            // Run function again to calculate sum
+            updateCurrentSum();
+        }
     }
 
     /**
@@ -185,7 +201,7 @@ $(document).ready(function(){
     });
 
     /**
-     * Change Speech voice
+     * Get Speech voice
      */
     let voices = [];
     speechSynthesis.onvoiceschanged = function() {
