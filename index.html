@@ -61,6 +61,15 @@
             <div class="modal-body">
                 <form id="setting_form">
                     <div class="input-group mb-3">
+                        <label class="input-group-text col-7" for="compliments">Compliments</label>
+                        <select class="form-select" id="compliments">
+                            <option value="direct">Direct Sum</option>
+                            <option value="5_comp">5 Compliments</option>
+                            <option value="10_comp">10 Compliments</option>
+                            <option value="mix_comp">All Compliments</option>
+                        </select>
+                    </div>
+                    <div class="input-group mb-3">
                         <span class="input-group-text col-9">Number of Digits</span>
                         <input type="number" id="digits" class="form-control col-3 text-center" min="1" max="9" value="1" required>
                     </div>
@@ -70,7 +79,7 @@
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text col-9">Time between numbers (ms)</span>
-                        <input type="number" id="time" class="form-control col-3 text-center" min="1000" max="5000" step="500" value="1000" required>
+                        <input type="number" id="time" class="form-control col-3 text-center" min="50" max="5000" step="50" value="500" required>
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text col-9">Include Subtractions</span>

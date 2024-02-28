@@ -27,18 +27,25 @@ $(document).ready(function(){
      * Setting options
      */
     let settings = {
+        compliments : $('#compliments').val(),
         numDigits : parseInt($('#digits').val()),
         numRows : parseInt($('#rows').val()),
         timeInterval : parseInt($('#time').val()),
         includeSubtractions : $('#subtractions').prop('checked'),
         speakNumbers : $('#speak').prop('checked')
     }
+
+    /**
+     * Update settings on save
+     */
     $('#settings_save').click(function(){
         settings.numDigits = parseInt($('#digits').val());
         settings.numRows = parseInt($('#rows').val());
         settings.timeInterval = parseInt($('#time').val());
         settings.includeSubtractions = $('#subtractions').prop('checked');
         settings.speakNumbers = $('#speak').prop('checked');
+        settings.compliments = $('#compliments').val();
+        updateRandomNumberOption();
     });
 
     /**
@@ -55,6 +62,17 @@ $(document).ready(function(){
     });
 
     /**
+     * Random number options
+     */
+    let numOptions = {
+        start: 1,
+        end: 5,
+        maxSum: 9,
+        minSum: 0,
+    }
+    updateRandomNumberOption();
+
+    /**
      * Game state management
      */
     let game = {
@@ -69,21 +87,18 @@ $(document).ready(function(){
      * Generates random numbers based on settings
      */
     function generateRandomNumbers() {
+        const numDigits = settings.numDigits;
+
         game.numbers = Array.from({ length: settings.numRows }, (_, index) => {
-            const positiveNumber = () => {
-                let number = '';
-                for (let i = 0; i < settings.numDigits; i++) {
-                    number += Math.floor(Math.random() * 10);
-                }
-                return parseInt(number);
+            const generateNumber = () => {
+                return mathRandom(numOptions.end, numOptions.start);
             };
     
-            const randomNumber = settings.includeSubtractions && Math.random() < 0.5 && index > 0 ? -positiveNumber() : positiveNumber();
+            const randomNumber = settings.includeSubtractions && Math.random() < 0.5 && index > 0 ? -generateNumber() : generateNumber();
     
             return randomNumber;
         });
     }
-
 
     /**
      * Updates the current sum of numbers
@@ -91,15 +106,71 @@ $(document).ready(function(){
     function updateCurrentSum() {
         game.currentAnswer = game.numbers.reduce((acc, num) => acc + num, 0);
 
-        // If sum is negative then switch numbers prefix randomly
-        if(game.currentAnswer < 0) {
-            game.numbers = game.numbers.map((e, i) => {
-                return Math.random() < 0.5 && i > 0 ? parseInt(e) * -1 : parseInt(e);
-            });
+        const complimentsType = settings.compliments;
 
-            // Run function again to calculate sum
+        // Modify the number according to compliments logic
+        if (complimentsType === 'direct' && game.currentAnswer > numOptions.maxSum) {
+            game.numbers = game.numbers.map(e => mathRandom(numOptions.end, numOptions.start));
+            game.numbers[0] = game.numbers[0] === 0 && game.numbers[1] < 0 ? Math.abs(game.numbers[1]) : game.numbers[0];
+            updateCurrentSum();
+        } else if (complimentsType === '5_comp' && (game.currentAnswer > numOptions.maxSum || game.currentAnswer < numOptions.minSum)) {
+            game.numbers = game.numbers.map(e => mathRandom(numOptions.end, numOptions.start));
+            updateCurrentSum();
+        } else if (game.currentAnswer < 0) {
+            game.numbers = game.numbers.map((e, i) => Math.random() < 0.5 && i > 0 ? -e : e);
             updateCurrentSum();
         }
+
+        // Check if includeSubtractions is true and ensure at least one digit is negative
+        const hasNegative = game.numbers.some(num => num < 0);
+        if (settings.includeSubtractions && !hasNegative) {
+            const smallestNumber = game.numbers.reduce((prev, num) => Math.min(prev, num));
+            if (smallestNumber >= 0) {
+                let index = game.numbers.indexOf(smallestNumber);
+                index = index === 0 ? index + 1 : index;
+                game.numbers[index] = -smallestNumber;
+                game.currentAnswer = game.numbers.reduce((acc, num) => acc + num, 0);
+            }
+        }
+    }
+
+    /**
+     * Update random number logic
+     */
+    function updateRandomNumberOption() {
+        const complimentsType = settings.compliments;
+        const digits = settings.numDigits;
+        const value = (10 ** digits) / 10;
+        if(complimentsType === 'direct') {
+            numOptions.start = 1 * value;
+            numOptions.end = 5 * value;
+            numOptions.minSum = 0;
+            numOptions.maxSum = 10 * value - 1;
+        } else if (complimentsType === '5_comp') {
+            numOptions.start = 1 * value;
+            numOptions.end = 5 * value;
+            numOptions.minSum = 5 * value;
+            numOptions.maxSum = 10 * value - 1;
+        } else if (complimentsType === '10_comp') {
+            numOptions.start = 1 * value;
+            numOptions.end = 10 * value;
+            numOptions.minSum = null;
+            numOptions.maxSum = null;
+        } else {
+            numOptions.start = 1 * value;
+            numOptions.end = 10 * value;
+            numOptions.minSum = null;
+            numOptions.maxSum = null;
+        }
+    }
+
+    /**
+     * Generate random number
+     * @param {Int} num 
+     * @returns int
+     */
+    function mathRandom(end, start = null) {
+        return start ? Math.floor(Math.random() * (end - start + 1) + start) : Math.floor(Math.random() * end);
     }
 
     /**
