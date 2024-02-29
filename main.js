@@ -22,6 +22,15 @@ $(document).ready(function(){
     const colors = ['#1a1a1a', '#ff5d52', '#fedc09', '#b1c642', '#68b9d8', '#023047', '#fb8500', '#e63946', '#588157', '#8338ec'];
     const colorsLength = colors.length;
 
+    /**
+     * Direct sum combinations
+     */
+    const directSums = [
+        [2, 2, 5], [1, 1, 2, 5], [1, 3, 5], [1, 1, 2], [5, 4], [6, 1, 2], [6, 1, 1, 1], [7, 2], [7, 1, 1],
+        [8, 1], [1, 1, 1, 1, 5], [2, 1, 5], [1, 1, 1, 5], [6, 2], [6, 1, 1], [2, 2], [6, 1, 2], [3, 5], [2, 5],
+        [1, 1, 5], [6, 1], [1, 5], [5, 1], [1, 1, 1, 1], [1, 2, 1], [2, 2], [3, 1], [1, 1, 1], [2, 1], [1, 1]
+    ]
+    let directSumComb = directSums;
     
     /**
      * Setting options
@@ -36,6 +45,19 @@ $(document).ready(function(){
     }
 
     /**
+     * Random number options
+     */
+    let numOptions = {
+        start: 1,
+        end: 5,
+        maxSum: 9,
+        minSum: 0,
+    }
+    
+    // Update the number options
+    updateRandomNumberOption();
+
+    /**
      * Update settings on save
      */
     $('#settings_save').click(function(){
@@ -45,6 +67,12 @@ $(document).ready(function(){
         settings.includeSubtractions = $('#subtractions').prop('checked');
         settings.speakNumbers = $('#speak').prop('checked');
         settings.compliments = $('#compliments').val();
+
+        // Update direct sum values
+        if(settings.compliments === 'direct') {
+            directSumComb = modifyDirectSumCombDigits(directSumComb);
+        }
+
         updateRandomNumberOption();
     });
 
@@ -62,15 +90,64 @@ $(document).ready(function(){
     });
 
     /**
-     * Random number options
+     * Generate random number
+     * @param {Int} num 
+     * @returns int
      */
-    let numOptions = {
-        start: 1,
-        end: 5,
-        maxSum: 9,
-        minSum: 0,
+    function mathRandom(end, start = null) {
+        return start ? Math.floor(Math.random() * (end - start + 1) + start) : Math.floor(Math.random() * end);
     }
-    updateRandomNumberOption();
+
+    /**
+     * Modify the directSumComb digits matching setting.numDigits
+     * @param {Object} directSumComb  
+     * @returns Object
+     */
+    function modifyDirectSumCombDigits(directSumComb) {
+        if(directSumComb == directSums) return;
+
+        directSumComb = directSums; // First reset to default
+        
+        const modifiedDirectSumComb = [];
+
+        for (const combination of directSumComb) {
+            const modifiedCombination = combination.map(num => {
+                const newNum = parseInt(num.toString().repeat(settings.numDigits));
+                return newNum;
+            });
+            modifiedDirectSumComb.push(modifiedCombination);
+        }
+        
+        return modifiedDirectSumComb;
+    }
+
+    /**
+     * Fetch random array for direct sum
+     * @param {Object} object 
+     * @returns array
+     */
+    function fetchDirectSum(object) {
+        let randomIndex = mathRandom(object.length);
+        return object[randomIndex];
+    }
+
+    /**
+     * Make selected directSum values negative
+     * @param {Array} directSum 
+     * @returns Array
+     */
+    function makeDirectSumNegative(directSum) {
+        let negativeNums = [];
+        for (let i = 1; i < directSum.length; i++) {
+            if(directSum[i] === 5) continue; // Skip 5 to avoid 5 compliments
+            negativeNums[i] = -directSum[i];
+            let currentSum = negativeNums.reduce((acc, curr) => acc + curr, 0);
+            if (currentSum >= 0) {
+                directSum[i] = negativeNums[i];
+            }
+        }
+        return directSum;
+    }
 
     /**
      * Game state management
@@ -87,8 +164,17 @@ $(document).ready(function(){
      * Generates random numbers based on settings
      */
     function generateRandomNumbers() {
-        const numDigits = settings.numDigits;
-
+        /**
+         * Get predefined direct sums
+         */
+        if(settings.compliments === 'direct') {
+            const currentDirectSum = fetchDirectSum(directSumComb);
+            game.numbers = !settings.includeSubtractions ? currentDirectSum : makeDirectSumNegative(currentDirectSum);
+            return game.numbers;
+        }
+        /**
+         * Generate random numbers for others
+         */
         game.numbers = Array.from({ length: settings.numRows }, (_, index) => {
             const generateNumber = () => {
                 return mathRandom(numOptions.end, numOptions.start);
@@ -108,12 +194,10 @@ $(document).ready(function(){
 
         const complimentsType = settings.compliments;
 
+        if(complimentsType === 'direct') return;
+
         // Modify the number according to compliments logic
-        if (complimentsType === 'direct' && game.currentAnswer > numOptions.maxSum) {
-            game.numbers = game.numbers.map(e => mathRandom(numOptions.end, numOptions.start));
-            game.numbers[0] = game.numbers[0] === 0 && game.numbers[1] < 0 ? Math.abs(game.numbers[1]) : game.numbers[0];
-            updateCurrentSum();
-        } else if (complimentsType === '5_comp' && (game.currentAnswer > numOptions.maxSum || game.currentAnswer < numOptions.minSum)) {
+        if (complimentsType === '5_comp' && (game.currentAnswer > numOptions.maxSum || game.currentAnswer < numOptions.minSum)) {
             game.numbers = game.numbers.map(e => mathRandom(numOptions.end, numOptions.start));
             updateCurrentSum();
         } else if (game.currentAnswer < 0) {
@@ -140,37 +224,18 @@ $(document).ready(function(){
     function updateRandomNumberOption() {
         const complimentsType = settings.compliments;
         const digits = settings.numDigits;
-        const value = (10 ** digits) / 10;
-        if(complimentsType === 'direct') {
-            numOptions.start = 1 * value;
-            numOptions.end = 5 * value;
-            numOptions.minSum = 0;
-            numOptions.maxSum = 10 * value - 1;
-        } else if (complimentsType === '5_comp') {
-            numOptions.start = 1 * value;
-            numOptions.end = 5 * value;
-            numOptions.minSum = 5 * value;
-            numOptions.maxSum = 10 * value - 1;
-        } else if (complimentsType === '10_comp') {
-            numOptions.start = 1 * value;
-            numOptions.end = 10 * value;
-            numOptions.minSum = null;
-            numOptions.maxSum = null;
+        const value = (10 ** digits) / 10; // Multiplier value for the mathRandom
+        numOptions.start = value; // Set start to 1
+        
+        if (complimentsType === '5_comp') {
+            numOptions.end = 5 * value; // End to 5
+            numOptions.minSum = 5; // Min sum to 5
+            numOptions.maxSum = 10 * value - 1; // Max sum to 9
         } else {
-            numOptions.start = 1 * value;
-            numOptions.end = 10 * value;
-            numOptions.minSum = null;
-            numOptions.maxSum = null;
+            numOptions.end = 10 * value; // End to 10
+            numOptions.minSum = null; // No min sum limit
+            numOptions.maxSum = null; // No max sum limit
         }
-    }
-
-    /**
-     * Generate random number
-     * @param {Int} num 
-     * @returns int
-     */
-    function mathRandom(end, start = null) {
-        return start ? Math.floor(Math.random() * (end - start + 1) + start) : Math.floor(Math.random() * end);
     }
 
     /**
