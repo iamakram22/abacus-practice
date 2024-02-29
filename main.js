@@ -104,8 +104,6 @@ $(document).ready(function(){
      * @returns Object
      */
     function modifyDirectSumCombDigits(directSumComb) {
-        if(directSumComb == directSums) return;
-
         directSumComb = directSums; // First reset to default
         
         const modifiedDirectSumComb = [];
@@ -138,6 +136,7 @@ $(document).ready(function(){
      */
     function makeDirectSumNegative(directSum) {
         let negativeNums = [];
+        negativeNums[0] = directSum[0]; // Skip first num, require to calculate the sum later
         for (let i = 1; i < directSum.length; i++) {
             if(directSum[i] === 5) continue; // Skip 5 to avoid 5 compliments
             negativeNums[i] = -directSum[i];
