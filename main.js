@@ -8,7 +8,6 @@ $(document).ready(function(){
     const yourAnswer = $('#yourAnswer');
     const messageContainer = $('#message');
     const settingCompliment = $('#compliments');
-    const settingDigits = $('#digits');
     const settingRows = $('#rows');
 
     /**
@@ -97,10 +96,8 @@ $(document).ready(function(){
      */
     settingCompliment.on('change', function() {
         if($(this).val() === 'direct') {
-            settingDigits.parent().hide();
             settingRows.parent().hide();
         } else {
-            settingDigits.parent().show();
             settingRows.parent().show();
         }
     })
