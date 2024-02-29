@@ -7,6 +7,9 @@ $(document).ready(function(){
     const entry = $('.entries');
     const yourAnswer = $('#yourAnswer');
     const messageContainer = $('#message');
+    const settingCompliment = $('#compliments');
+    const settingDigits = $('#digits');
+    const settingRows = $('#rows');
 
     /**
      * Texts
@@ -89,6 +92,18 @@ $(document).ready(function(){
         $('#settings_save, .btn-close').prop('disabled', !isValid);
     });
 
+    /**
+     * Disable Digits field for direct sum
+     */
+    settingCompliment.on('change', function() {
+        if($(this).val() === 'direct') {
+            settingDigits.parent().hide();
+            settingRows.parent().hide();
+        } else {
+            settingDigits.parent().show();
+            settingRows.parent().show();
+        }
+    })
     /**
      * Generate random number
      * @param {Int} num 
