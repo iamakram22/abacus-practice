@@ -110,7 +110,7 @@ $(document).ready(function(){
      * @returns int
      */
     function mathRandom(end, start = null) {
-        return start ? Math.floor(Math.random() * (end - start + 1) + start) : Math.floor(Math.random() * end);
+        return start ? Math.floor(Math.random() * (end - start) + start) : Math.floor(Math.random() * end);
     }
 
     /**
