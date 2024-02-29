@@ -198,6 +198,15 @@ $(document).ready(function(){
     
             return randomNumber;
         });
+
+        let checkNums = [];
+        for (let i = 0; i < game.numbers.length; i++) {
+            checkNums[i] = game.numbers[i];
+            let currentSum = checkNums.reduce((acc, curr) => acc + curr, 0);
+            if (currentSum < 0 && checkNums[i] < 0) {
+                game.numbers[i] = Math.abs(game.numbers[i]);
+            }
+        }
     }
 
     /**
