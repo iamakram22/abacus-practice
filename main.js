@@ -1,3 +1,5 @@
+import { colors, directSumsPositive, directSumsNegative } from "./predefined.js";
+
 $(document).ready(function(){
     /**
      * DOM Elements
@@ -21,19 +23,8 @@ $(document).ready(function(){
      */
     const controls_height = $('#controls').outerHeight();
     $('#display').css('height', `calc(100svh - ${controls_height}px)`);
-    const colors = ['#1a1a1a', '#ff5d52', '#fedc09', '#b1c642', '#68b9d8', '#023047', '#fb8500', '#e63946', '#588157', '#8338ec'];
     const colorsLength = colors.length;
 
-    /**
-     * Direct sum combinations
-     */
-    const directSums = [
-        [2, 2, 5], [1, 1, 2, 5], [1, 3, 5], [1, 1, 2], [5, 4], [6, 1, 2], [6, 1, 1, 1], [7, 2], [7, 1, 1],
-        [8, 1], [1, 1, 1, 1, 5], [2, 1, 5], [1, 1, 1, 5], [6, 2], [6, 1, 1], [2, 2], [6, 1, 2], [3, 5], [2, 5],
-        [1, 1, 5], [6, 1], [1, 5], [5, 1], [1, 1, 1, 1], [1, 2, 1], [2, 2], [3, 1], [1, 1, 1], [2, 1], [1, 1]
-    ]
-    let directSumComb = directSums;
-    
     /**
      * Setting options
      */
@@ -60,6 +51,11 @@ $(document).ready(function(){
     updateRandomNumberOption();
 
     /**
+     * Direct sum combinations
+     */
+    let directSumComb;
+
+    /**
      * Update settings on save
      */
     $('#settings_save').click(function(){
@@ -72,7 +68,7 @@ $(document).ready(function(){
 
         // Update direct sum values
         if(settings.compliments === 'direct') {
-            directSumComb = modifyDirectSumCombDigits(directSumComb);
+            directSumComb = !settings.includeSubtractions ? modifyDirectSumCombDigits(directSumsPositive) : modifyDirectSumCombDigits(directSumsNegative);
         }
 
         updateRandomNumberOption();
@@ -116,13 +112,17 @@ $(document).ready(function(){
      * @returns Object
      */
     function modifyDirectSumCombDigits(directSumComb) {
-        directSumComb = directSums; // First reset to default
+        directSumComb = !settings.includeSubtractions ? directSumsPositive : directSumsNegative; // First reset to default
         
         const modifiedDirectSumComb = [];
 
+        const convertNum = (e) => {
+            return e.toString().repeat(settings.numDigits)
+        }
+
         for (const combination of directSumComb) {
             const modifiedCombination = combination.map(num => {
-                const newNum = parseInt(num.toString().repeat(settings.numDigits));
+                const newNum = num < 0 ? -parseInt(convertNum(Math.abs(num))) : parseInt(convertNum(num));
                 return newNum;
             });
             modifiedDirectSumComb.push(modifiedCombination);
@@ -139,25 +139,6 @@ $(document).ready(function(){
     function fetchDirectSum(object) {
         let randomIndex = mathRandom(object.length);
         return object[randomIndex];
-    }
-
-    /**
-     * Make selected directSum values negative
-     * @param {Array} directSum 
-     * @returns Array
-     */
-    function makeDirectSumNegative(directSum) {
-        let negativeNums = [];
-        negativeNums[0] = directSum[0]; // Skip first num, require to calculate the sum later
-        for (let i = 1; i < directSum.length; i++) {
-            if(directSum[i] === 5) continue; // Skip 5 to avoid 5 compliments
-            negativeNums[i] = -directSum[i];
-            let currentSum = negativeNums.reduce((acc, curr) => acc + curr, 0);
-            if (currentSum >= 0) {
-                directSum[i] = negativeNums[i];
-            }
-        }
-        return directSum;
     }
 
     /**
@@ -179,8 +160,7 @@ $(document).ready(function(){
          * Get predefined direct sums
          */
         if(settings.compliments === 'direct') {
-            const currentDirectSum = fetchDirectSum(directSumComb);
-            game.numbers = !settings.includeSubtractions ? currentDirectSum : makeDirectSumNegative(currentDirectSum);
+            game.numbers = fetchDirectSum(directSumComb);
             return game.numbers;
         }
         /**
