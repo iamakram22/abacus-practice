@@ -58,9 +58,9 @@ $(document).ready(function(){
     /**
      * Update settings on save
      */
-    $('#settings_save').click(function(){
+    $('#settings_save').click(function(event){
         settings.numDigits = parseInt($('#digits').val());
-        settings.numRows = parseInt($('#rows').val());
+        settings.numRows = $('#rows').val() > 6 ? 6 : parseInt($('#rows').val());
         settings.timeInterval = parseInt($('#time').val());
         settings.includeSubtractions = $('#subtractions').prop('checked');
         settings.speakNumbers = $('#speak').prop('checked');
@@ -69,6 +69,7 @@ $(document).ready(function(){
         // Update direct sum values
         if(settings.compliments === 'direct') {
             directSumComb = !settings.includeSubtractions ? modifyDirectSumCombDigits(directSumsPositive) : modifyDirectSumCombDigits(directSumsNegative);
+            directSumComb = directSumComb.filter(combination => combination.length === settings.numRows);
         }
 
         updateRandomNumberOption();
@@ -92,9 +93,10 @@ $(document).ready(function(){
      */
     settingCompliment.on('change', function() {
         if($(this).val() === 'direct') {
-            settingRows.parent().hide();
+            if(!settings.includeSubtractions)
+            settingRows.attr('max', 6).val(2);
         } else {
-            settingRows.parent().show();
+            settingRows.attr('max', 10);
         }
     })
     /**
@@ -137,8 +139,9 @@ $(document).ready(function(){
      * @returns array
      */
     function fetchDirectSum(object) {
-        let randomIndex = mathRandom(object.length);
-        return object[randomIndex];
+        const filteredCombinations = object.filter(combination => combination.length === settings.numRows);
+        let randomIndex = mathRandom(filteredCombinations.length);
+        return filteredCombinations[randomIndex];
     }
 
     /**
