@@ -213,6 +213,10 @@ $(document).ready(function(){
      * @param {str,int} toSpeak 
      */
     function convertSpeech(toSpeak) {
+        if (!('speechSynthesis' in window)) {
+            alert('Speech synthesis not supported on this device');
+            return;
+        }
         const speakUtterance = new SpeechSynthesisUtterance();
         speakUtterance.voice = voices[2];
         speakUtterance.rate = 1.5;
