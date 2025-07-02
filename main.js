@@ -206,6 +206,9 @@ $(document).ready(function(){
     let voices = [];
     speechSynthesis.onvoiceschanged = function() {
         voices = speechSynthesis.getVoices();
+        if(!voices.length) {
+            alert('No voices available for speech synthesis');
+        }
     }
 
     /**
