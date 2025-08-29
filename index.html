@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Abacus Practice Tool</title>
     <link rel="stylesheet" href="assets/bootstrap.min.css">
-    <link rel="stylesheet" href="style.min.css">
+    <link rel="stylesheet" href="./style.min.css">
   </head>
   <body>
     <noscript>
@@ -70,7 +70,7 @@
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text col-9">Time between numbers (ms)</span>
-                        <input type="number" id="time" class="form-control col-3 text-center" min="1000" max="5000" step="500" value="1000" required>
+                        <input type="number" id="time" class="form-control col-3 text-center" min="100" max="5000" step="100" value="500" required>
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text col-9">Include Subtractions</span>
@@ -81,7 +81,7 @@
                     <div class="input-group mb-3">
                         <span class="input-group-text col-9">Speak Numbers</span>
                         <div class="form-control col-3 text-center">
-                            <input class="form-check-input" type="checkbox" value="" id="speak">
+                            <input class="form-check-input" type="checkbox" value="" id="speak" checked>
                         </div>
                     </div>
                 </form>
@@ -110,6 +110,6 @@
     <script src="assets/jquery.validate.min.js"></script>
     <script src="./assets/mespeak/mespeak.js"></script>
     <script src="./assets/mespeak/mespeak-core.js"></script>
-    <script src="script.min.js"></script>
+    <script src="./script.min.js"></script>
   </body>
 </html>
