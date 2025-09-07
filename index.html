@@ -93,6 +93,13 @@
                             <input class="form-check-input" type="checkbox" value="" id="speak">
                         </div>
                     </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text col-6" for="voiceModel">Change Voice Model</label>
+                        <select class="form-select col-6" id="voiceModel">
+                            <option value="speech" selected>Voice Model 1</option>
+                            <option value="mespeak">Voice Model 2</option>
+                        </select>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -117,6 +124,8 @@
     <script src="assets/bootstrap.min.js"></script>
     <script src="assets/jquery.min.js"></script>
     <script src="assets/jquery.validate.min.js"></script>
+    <script src="./assets/mespeak/mespeak.js"></script>
+    <script src="./assets/mespeak/mespeak-core.js"></script>
     <script src="script.min.js" type="module"></script>
   </body>
 </html>

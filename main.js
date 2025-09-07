@@ -1,6 +1,32 @@
 import { colors, directSumsPositive, directSumsNegative } from "./predefined.js";
 
-$(document).ready(function(){
+$(document).ready(function () {
+    /** 
+     * mespeak config for speech synthesis browser API alternative
+     */
+    let mespeakLoaded = false;
+
+    const mespeakConfig = {
+        variant: "f5",
+        speed: 160,
+        pitch: 50,
+        amplitude: 100,
+    };
+
+    meSpeak.loadVoice("voice-en.json", function (success) {
+        if (success) {
+            try {
+                mespeakLoaded = true;
+                meSpeak.speak("a", { amplitude: 0 }); // This is require to initialize the mespeak
+            } catch (e) {
+                console.error("Voice test failed:", e);
+                mespeakLoaded = false;
+            }
+        } else {
+            console.error("[meSpeak] Voice file failed to load - check file path and name");
+        }
+    });
+
     /**
      * DOM Elements
      */
@@ -29,12 +55,13 @@ $(document).ready(function(){
      * Setting options
      */
     let settings = {
-        compliments : $('#compliments').val(),
-        numDigits : parseInt($('#digits').val()),
-        numRows : parseInt($('#rows').val()),
-        timeInterval : parseInt($('#time').val()),
-        includeSubtractions : $('#subtractions').prop('checked'),
-        speakNumbers : $('#speak').prop('checked')
+        compliments: $('#compliments').val(),
+        numDigits: parseInt($('#digits').val()),
+        numRows: parseInt($('#rows').val()),
+        timeInterval: parseInt($('#time').val()),
+        includeSubtractions: $('#subtractions').prop('checked'),
+        speakNumbers: $('#speak').prop('checked'),
+        voiceModel: $("#voiceModel").val(),
     }
 
     /**
@@ -46,7 +73,7 @@ $(document).ready(function(){
         maxSum: 9,
         minSum: 0,
     }
-    
+
     // Update the number options
     updateRandomNumberOption();
 
@@ -58,16 +85,17 @@ $(document).ready(function(){
     /**
      * Update settings on save
      */
-    $('#settings_save').click(function(event){
+    $('#settings_save').click(function (event) {
         settings.numDigits = parseInt($('#digits').val());
         settings.numRows = $('#rows').val() > 6 ? 6 : parseInt($('#rows').val());
         settings.timeInterval = parseInt($('#time').val());
         settings.includeSubtractions = $('#subtractions').prop('checked');
         settings.speakNumbers = $('#speak').prop('checked');
+        settings.voiceModel = $("#voiceModel").val();
         settings.compliments = $('#compliments').val();
 
         // Update direct sum values
-        if(settings.compliments === 'direct') {
+        if (settings.compliments === 'direct') {
             directSumComb = !settings.includeSubtractions ? modifyDirectSumCombDigits(directSumsPositive) : modifyDirectSumCombDigits(directSumsNegative);
             directSumComb = directSumComb.filter(combination => combination.length === settings.numRows);
         }
@@ -83,7 +111,7 @@ $(document).ready(function(){
     /**
      * Disable settings save or close on invalid
      */
-    $('#setting_form input').on('input',function() {             
+    $('#setting_form input').on('input', function () {
         const isValid = $(this).valid();
         $('#settings_save, .btn-close').prop('disabled', !isValid);
     });
@@ -91,10 +119,10 @@ $(document).ready(function(){
     /**
      * Disable Digits field for direct sum
      */
-    settingCompliment.on('change', function() {
-        if($(this).val() === 'direct') {
-            if(!settings.includeSubtractions)
-            settingRows.attr('max', 6).val(2);
+    settingCompliment.on('change', function () {
+        if ($(this).val() === 'direct') {
+            if (!settings.includeSubtractions)
+                settingRows.attr('max', 6).val(2);
         } else {
             settingRows.attr('max', 10);
         }
@@ -115,7 +143,7 @@ $(document).ready(function(){
      */
     function modifyDirectSumCombDigits(directSumComb) {
         directSumComb = !settings.includeSubtractions ? directSumsPositive : directSumsNegative; // First reset to default
-        
+
         const modifiedDirectSumComb = [];
 
         const convertNum = (e) => {
@@ -129,7 +157,7 @@ $(document).ready(function(){
             });
             modifiedDirectSumComb.push(modifiedCombination);
         }
-        
+
         return modifiedDirectSumComb;
     }
 
@@ -162,7 +190,7 @@ $(document).ready(function(){
         /**
          * Get predefined direct sums
          */
-        if(settings.compliments === 'direct') {
+        if (settings.compliments === 'direct') {
             game.numbers = fetchDirectSum(directSumComb);
             return game.numbers;
         }
@@ -173,9 +201,9 @@ $(document).ready(function(){
             const generateNumber = () => {
                 return mathRandom(numOptions.end, numOptions.start);
             };
-    
+
             const randomNumber = settings.includeSubtractions && Math.random() < 0.5 && index > 0 ? -generateNumber() : generateNumber();
-    
+
             return randomNumber;
         });
 
@@ -197,7 +225,7 @@ $(document).ready(function(){
 
         const complimentsType = settings.compliments;
 
-        if(complimentsType === 'direct') return;
+        if (complimentsType === 'direct') return;
 
         // Modify the number according to compliments logic
         if (complimentsType === '5_comp' && (game.currentAnswer > numOptions.maxSum || game.currentAnswer < numOptions.minSum)) {
@@ -229,7 +257,7 @@ $(document).ready(function(){
         const digits = settings.numDigits;
         const value = (10 ** digits) / 10; // Multiplier value for the mathRandom
         numOptions.start = value; // Set start to 1
-        
+
         if (complimentsType === '5_comp') {
             numOptions.end = 5 * value; // End to 5
             numOptions.minSum = 5; // Min sum to 5
@@ -250,7 +278,7 @@ $(document).ready(function(){
             numberContainer.fadeIn().text(game.numbers[game.currentIndex]);
             let i = Math.floor(Math.random() * colorsLength);
             numberContainer.css('color', colors[i]);
-            if(settings.speakNumbers) {
+            if (settings.speakNumbers) {
                 convertSpeech(game.numbers[game.currentIndex]);
             } else {
                 game.currentIndex++;
@@ -278,7 +306,7 @@ $(document).ready(function(){
         numberContainer.fadeIn().text('?');
         disabledElement.prop('disabled', false);
         yourAnswer.focus();
-        
+
         // Check if the entry has already been added
         if (!game.entryAdded) {
             makeEntry(game.numbers);
@@ -300,13 +328,13 @@ $(document).ready(function(){
     /**
      * Play the numbers
      */
-    $('#play').click(function(){
+    $('#play').click(function () {
         game.currentIndex = 0;
         generateRandomNumbers();
         updateCurrentSum();
         game.entryAdded = false;
         yourAnswer.val('');
-        if(settings.speakNumbers) {
+        if (settings.speakNumbers) {
             displayNumbers();
         } else {
             game.playnum = setInterval(displayNumbers, settings.timeInterval);
@@ -316,10 +344,10 @@ $(document).ready(function(){
     /**
      * Replay last numbers
      */
-    $('#replay').click(function(){
+    $('#replay').click(function () {
         game.currentIndex = 0;
         yourAnswer.val('')
-        if(settings.speakNumbers) {
+        if (settings.speakNumbers) {
             displayNumbers();
         } else {
             game.playnum = setInterval(displayNumbers, settings.timeInterval);
@@ -329,44 +357,139 @@ $(document).ready(function(){
     /**
      * Perform Answer check
      */
-    $('#check').click(function() {
+    $('#check').click(function () {
         if (game.currentAnswer == yourAnswer.val()) {
             messageContainer.text(correct);
-            if(settings.speakNumbers) convertSpeech(correct);
+            if (settings.speakNumbers) convertSpeech(correct);
         } else {
             messageContainer.text(incorrect);
-            if(settings.speakNumbers) convertSpeech(incorrect);
+            if (settings.speakNumbers) convertSpeech(incorrect);
         }
     });
+
+    /**
+     * Normalizes input for TTS
+     * @param {int|string} input 
+     * @returns string
+     */
+    function normalizeSpeechText(input) {
+        const text = String(input); // ensure it's a string
+        let normalized = text;
+
+        // Replace starting hyphen with 'minus '
+        if (normalized.startsWith('-')) {
+            normalized = 'minus ' + normalized.substring(1);
+        }
+
+        // Replace other standalone hyphens (optional, context dependent)
+        normalized = normalized.replace(/\b-\b/g, ' minus ');
+
+        return normalized;
+    }
 
     /**
      * Get Speech voice
      */
     let voices = [];
-    speechSynthesis.onvoiceschanged = function() {
+    speechSynthesis.onvoiceschanged = function () {
         voices = speechSynthesis.getVoices();
     }
 
     /**
      * Convert text to speech
-     * @param {str,int} toSpeak 
+     * @param {str,int} toSpeak
      */
     function convertSpeech(toSpeak) {
+        if (settings.voiceModel === "mespeak") {
+            fallbackSpeak(toSpeak);
+            return;
+        }
+
+        if ("speechSynthesis" in window && settings.voiceModel !== "mespeak") {
+            toSpeak = normalizeSpeechText(toSpeak);
+            let voices = speechSynthesis.getVoices();
+            // If voices are not loaded yet, wait for onvoiceschanged event
+            if (voices.length === 0) {
+                speechSynthesis.onvoiceschanged = () => {
+                    voices = speechSynthesis.getVoices();
+                    if (voices.length === 0) {
+                        fallbackSpeak(toSpeak); // No voices, fallback to meSpeak
+                    } else {
+                        speakWithSpeechSynthesis(toSpeak, voices); // Voices available, speak now
+                    }
+                };
+            } else {
+                speakWithSpeechSynthesis(toSpeak, voices); // Voices already available, speak now
+            }
+        } else {
+            fallbackSpeak(toSpeak); // No speech synthesis support, fallback
+        }
+    }
+
+    function speakWithSpeechSynthesis(toSpeak, voices) {
         const speakUtterance = new SpeechSynthesisUtterance();
-        speakUtterance.voice = voices[2];
+        // You currently use voices[2], but check if exists, fallback to 0
+        speakUtterance.voice = voices[2] || voices[0];
         speakUtterance.rate = 1.5;
         speakUtterance.pitch = 1;
-        speakUtterance.lang = 'en-US'
+        speakUtterance.lang = "en-US";
         speakUtterance.text = toSpeak;
-        if(settings.speakNumbers){
-            speakUtterance.onend = function() {
+
+        if (settings.speakNumbers) {
+            speakUtterance.onend = function () {
                 game.currentIndex++;
                 if (game.currentIndex <= game.numbers.length) {
                     setTimeout(displayNumbers, settings.timeInterval);
                 }
-            }
+            };
         }
+
         speechSynthesis.speak(speakUtterance);
     }
-    
+
+    function fallbackSpeak(toSpeak) {
+        if (window.meSpeak && mespeakLoaded) {
+            let textToSpeak = toSpeak.toString();
+
+            textToSpeak = normalizeSpeechText(textToSpeak);
+
+            // Check if voice is actually loaded before speaking
+            try {
+                // Use meSpeak.speak with a callback to know when speaking is complete
+                meSpeak.speak(textToSpeak.toString(), mespeakConfig, function () {
+                    // After speech ends, proceed to the next number if speaking numbers is enabled and toSpeak is a number
+                    if (settings.speakNumbers && typeof toSpeak === "number") {
+                        game.currentIndex++;
+                        if (game.currentIndex < game.numbers.length) {
+                            setTimeout(displayNumbers, settings.timeInterval);
+                        } else {
+                            clearInterval(game.playnum);
+                            afterShowNumber();
+                        }
+                    }
+                });
+            } catch (e) {
+                console.error("[fallbackSpeak] meSpeak error:", e);
+                // Continue without speech
+                if (settings.speakNumbers && typeof toSpeak === "number") {
+                    game.currentIndex++;
+                    setTimeout(displayNumbers, settings.timeInterval);
+                }
+                return;
+            }
+
+        } else {
+            console.error("[fallbackSpeak] meSpeak is not loaded or not available");
+            // Fallback to continue without speech
+            if (settings.speakNumbers && typeof toSpeak === "number") {
+                game.currentIndex++;
+                if (game.currentIndex < game.numbers.length) {
+                    setTimeout(displayNumbers, settings.timeInterval);
+                } else {
+                    clearInterval(game.playnum);
+                    afterShowNumber();
+                }
+            }
+        }
+    }
 });
