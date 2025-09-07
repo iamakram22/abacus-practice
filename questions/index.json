@@ -1,5 +1,5 @@
 {
-  "abacus": {
+  "franchise-abacus": {
     "JR-1": [
       "+10_compliments_single_digit.csv",
       "+5_compliments_single_digit.csv",
@@ -69,6 +69,98 @@
       "add_with_abacus.csv",
       "subtract_with_abacus.csv"
     ],
+    "SK-1": [
+      "add_&_sub_single_digit_direct_sums_3_rows.csv",
+      "single_digit_direct_sums_4_rows.csv"
+    ],
+    "SK-2": [
+      "+5_compliments_single_digit.csv",
+      "-5_compliments_single_digit.csv",
+      "single_digit_direct_sums_5_rows.csv"
+    ],
+    "SK-3": [
+      "+10_compliments_single_digit.csv",
+      "+5_compliments_single_digit.csv",
+      "-5_compliments_single_digit.csv",
+      "single_digit_direct_sums_5_rows.csv"
+    ],
+    "SK-4": [
+      "+10_compliments_single_digit.csv",
+      "+5_compliments_single_digit.csv",
+      "-10_compliments_single_digit.csv",
+      "-5_compliments_single_digit.csv",
+      "single_digit_direct_sums_6_rows.csv"
+    ],
+    "SR-1": [
+      "+10_compliments_single_digit.csv",
+      "+5_compliments_single_digit.csv",
+      "+_mixed_compliments_single_digit.csv",
+      "-10_compliments_single_digit.csv",
+      "-5_compliments_single_digit.csv",
+      "-_mixed_compliments_single_digit.csv",
+      "single_digit_direct_sums_5_rows.csv",
+      "single_digit_direct_sums_6_rows.csv"
+    ],
+    "SR-2": [
+      "double_digit_all_complements.csv",
+      "double_digit_direct.csv",
+      "long_add_&_sub_single_digit.csv",
+      "three_digit_mix_5_row.csv"
+    ],
+    "SR-3": [
+      "4_digit_mix_in_school.csv",
+      "mix_double_digit.csv",
+      "multiplication_(1d_x_1d).csv",
+      "multiplication_(1d_x_3d).csv",
+      "multiplication_(2d_x_1d).csv",
+      "three_digit_mix_5_rows.csv"
+    ],
+    "SR-4": [
+      "4_digit_mix_comp.csv",
+      "mix_double_digit.csv",
+      "multiplication_(1d_x_1d).csv",
+      "multiplication_(1d_x_3d).csv",
+      "multiplication_(2d_x_1d).csv",
+      "multiplication_(2d_x_2d).csv",
+      "multiplication_(2d_x_3d).csv",
+      "single_digit_direct_sums_6_rows.csv",
+      "three_digit_mix_6_rows.csv"
+    ],
+    "SR-5": [
+      "3d_x_2d.csv",
+      "3d_x_3d.csv",
+      "4_digit_mix_comp.csv",
+      "4d_x_3d.csv",
+      "division_2d_÷_1d.csv",
+      "division_3d_÷_1d.csv",
+      "division_4d_÷_1d.csv",
+      "multiplication_(2d_x_2d).csv",
+      "multiplication_(2d_x_3d).csv",
+      "multiplication_(2d_x_4d).csv",
+      "multiplication_(3d_x_4d).csv",
+      "three_digit_mix_6_rows.csv"
+    ],
+    "SR-6": [
+      "decimal_add-sub_(4_rows).csv",
+      "division_3d_÷_2d.csv",
+      "division_4d_÷_2d.csv",
+      "division_4d_÷_3d.csv"
+    ],
+    "SR-9": [
+      "percentage_with_abacus.csv",
+      "squareroot_with_abacus.csv"
+    ],
+    "SR-10": [
+      "cube_roots.csv",
+      "hcf.csv",
+      "lcm.csv",
+      "mix_double_digit.csv",
+      "percentage_with_abacus.csv",
+      "single_digit_direct_sums_6_rows.csv",
+      "three_digit_mix_6_rows.csv"
+    ]
+  },
+  "school-abacus": {
     "NJR-1": [
       "+10_compliments_single_digit.csv",
       "+5_compliments_single_digit.csv",
@@ -151,128 +243,28 @@
       "multiplication_(2d_x_2d).csv",
       "single_digit_direct_sums_6_rows.csv"
     ],
-    "SK-1_F": [
-      "add_&_sub_single_digit_direct_sums_3_rows.csv",
-      "single_digit_direct_sums_4_rows.csv"
-    ],
-    "SK-1_S": [
+    "SK-1": [
       "single_digit_direct_sums_2_rows.csv",
       "single_digit_direct_sums_3_rows.csv",
       "single_digit_direct_sums_4_rows.csv"
     ],
-    "SK-2_F": [
+    "SK-2": [
       "+5_compliments_single_digit.csv",
       "-5_compliments_single_digit.csv",
       "single_digit_direct_sums_5_rows.csv"
     ],
-    "SK-2_S": [
-      "+5_compliments_single_digit.csv",
-      "-5_compliments_single_digit.csv",
-      "single_digit_direct_sums_5_rows.csv"
-    ],
-    "SK-3_F": [
+    "SK-3": [
       "+10_compliments_single_digit.csv",
       "+5_compliments_single_digit.csv",
       "-5_compliments_single_digit.csv",
       "single_digit_direct_sums_5_rows.csv"
     ],
-    "SK-3_S": [
-      "+10_compliments_single_digit.csv",
-      "+5_compliments_single_digit.csv",
-      "-5_compliments_single_digit.csv",
-      "single_digit_direct_sums_5_rows.csv"
-    ],
-    "SK-4_F": [
+    "SK-4": [
       "+10_compliments_single_digit.csv",
       "+5_compliments_single_digit.csv",
       "-10_compliments_single_digit.csv",
       "-5_compliments_single_digit.csv",
       "single_digit_direct_sums_6_rows.csv"
-    ],
-    "SK-4_S": [
-      "+10_compliments_single_digit.csv",
-      "+5_compliments_single_digit.csv",
-      "-10_compliments_single_digit.csv",
-      "-5_compliments_single_digit.csv",
-      "single_digit_direct_sums_6_rows.csv"
-    ],
-    "SR-1": [
-      "+10_compliments_single_digit.csv",
-      "+5_compliments_single_digit.csv",
-      "+_mixed_compliments_single_digit.csv",
-      "-10_compliments_single_digit.csv",
-      "-5_compliments_single_digit.csv",
-      "-_mixed_compliments_single_digit.csv",
-      "single_digit_direct_sums_5_rows.csv",
-      "single_digit_direct_sums_6_rows.csv"
-    ],
-    "SR-2": [
-      "double_digit_all_complements.csv",
-      "double_digit_direct.csv",
-      "long_add_&_sub_single_digit.csv",
-      "three_digit_mix_5_row.csv"
-    ],
-    "SR-3": [
-      "4_digit_mix_in_school.csv",
-      "mix_double_digit.csv",
-      "multiplication_(1d_x_1d).csv",
-      "multiplication_(1d_x_3d).csv",
-      "multiplication_(2d_x_1d).csv",
-      "three_digit_mix_5_rows.csv"
-    ],
-    "SR-4": [
-      "4_digit_mix_comp.csv",
-      "mix_double_digit.csv",
-      "multiplication_(1d_x_1d).csv",
-      "multiplication_(1d_x_3d).csv",
-      "multiplication_(2d_x_1d).csv",
-      "multiplication_(2d_x_2d).csv",
-      "multiplication_(2d_x_3d).csv",
-      "single_digit_direct_sums_6_rows.csv",
-      "three_digit_mix_6_rows.csv"
-    ],
-    "SR-5": [
-      "3d_x_2d.csv",
-      "3d_x_3d.csv",
-      "4_digit_mix_comp.csv",
-      "4d_x_3d.csv",
-      "division_2d_÷_1d.csv",
-      "division_3d_÷_1d.csv",
-      "division_4d_÷_1d.csv",
-      "multiplication_(2d_x_2d).csv",
-      "multiplication_(2d_x_3d).csv",
-      "multiplication_(2d_x_4d).csv",
-      "multiplication_(3d_x_4d).csv",
-      "three_digit_mix_6_rows.csv"
-    ],
-    "SR-6": [
-      "decimal_add-sub_(4_rows).csv",
-      "division_3d_÷_2d.csv",
-      "division_4d_÷_2d.csv",
-      "division_4d_÷_3d.csv"
-    ],
-    "SR-9": [
-      "percentage_with_abacus.csv",
-      "squareroot_with_abacus.csv"
-    ],
-    "SR-10": [
-      "cube_roots.csv",
-      "hcf.csv",
-      "lcm.csv",
-      "mix_double_digit.csv",
-      "percentage_with_abacus.csv",
-      "single_digit_direct_sums_6_rows.csv",
-      "three_digit_mix_6_rows.csv"
     ]
-  },
-  "vedic-maths": {
-    "JVM-1": [],
-    "JVM-2": [],
-    "SVM VI TERM 2": [],
-    "SVM VII TERM 1": [],
-    "SVM VII TERM 2": [],
-    "SVM VIII TERM 1": [],
-    "SVM VIII TERM 2": [],
-    "SVM VITERM 1": []
   }
 }
