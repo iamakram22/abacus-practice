@@ -1,48 +1,66 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Abacus Practice Tool</title>
     <link rel="stylesheet" href="assets/bootstrap.min.css">
     <link rel="stylesheet" href="style.min.css">
-  </head>
-  <body>
+</head>
+
+<body>
     <noscript>
         <div class="alert alert-danger" style="padding: 20px; position:absolute; top: 100px;left: 100px;">
-            <p>You need <strong style="font-size:1.2em;">javascript</strong> to be turned <strong>on</strong> for this to work !</p>
+            <p>You need <strong style="font-size:1.2em;">javascript</strong> to be turned <strong>on</strong> for this
+                to work !</p>
         </div>
     </noscript>
 
     <section id="main">
+        <div id="topic-display" class="d-none position-absolute top-0 w-100 z-1">
+            <div class="alert alert-info border-0" role="alert">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong class="primary-color">Current Topic:</strong>
+                        <span id="currentSelection" class="ms-2"></span>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
+                        data-bs-target="#settings">Change Topic</button>
+                </div>
+            </div>
+        </div>
+
         <div id="display" class="d-flex justify-content-center align-items-center position-relative text-center">
             <!-- Numbers -->
             <div id="numbers"></div>
             <div id="message"></div>
         </div>
 
-        <button id="history-btn" class="btn btn-outline-dark position-absolute disabled-element" type="button" data-bs-toggle="offcanvas" data-bs-target="#history" aria-controls="historyToggle" disabled>
-            History
-        </button>
-
         <!-- Controls -->
         <div id="controls" class="d-flex flex-wrap position-absolute bottom-0 start-0 end-0">
             <div class="col col-lg-3 col-8 order-lg-1 order-2">
                 <button type="button" id="play" class="disabled-element btn btn-success primary">Play</button>
-                <button type="button" id="replay" class="disabled-element btn btn-secondary mx-2" disabled>Replay</button>
+                <button type="button" id="replay" class="disabled-element btn btn-secondary mx-2"
+                    disabled>Replay</button>
             </div>
             <div class="col col-lg-5 col-12 order-lg-2 order-1">
                 <div class="input-group">
                     <label class="input-group-text" for="yourAnswer">Your answer</label>
-                    <input type="text" inputmode="numeric" class="disabled-element form-control" id="yourAnswer" disabled>
+                    <input type="text" inputmode="numeric" class="disabled-element form-control" id="yourAnswer"
+                        disabled>
                     <button type="button" id="check" class="disabled-element btn btn-success" disabled>check</button>
                 </div>
             </div>
             <div class="col col-lg-4 col-4 text-end order-lg-3 order-3">
                 <!-- <button type="button" id="settings" class="btn btn-outline-dark">Settings</button> -->
-                <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#settings">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#settings">
                     Settings
-                  </button>
+                </button>
+                <button id="history-btn" class="btn btn-outline-dark disabled-element" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#history" aria-controls="historyToggle" disabled>
+                    History
+                </button>
             </div>
             <div class="col col-12 order-4 pt-2 text-center">
                 Tool Developed by <a href="https://hashtagweb.in" target="_blank">Hashtagweb.in</a>
@@ -51,60 +69,58 @@
     </section>
 
     <!-- Settings -->
-    <div class="modal fade" id="settings" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-keyboard="false" data-bs-backdrop="static">
+    <div class="modal fade" id="settings" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        data-bs-keyboard="false" data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Settings</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="setting_form">
-                    <div class="input-group mb-3">
-                        <label class="input-group-text col-7" for="compliments">Compliments</label>
-                        <select class="form-select" id="compliments">
-                            <option value="direct">Direct Sum</option>
-                            <option value="5_comp">5 Compliments</option>
-                            <option value="10_comp">10 Compliments</option>
-                            <option value="mix_comp" selected>All Compliments</option>
-                        </select>
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text col-9">Number of Digits</span>
-                        <input type="number" id="digits" class="form-control col-3 text-center" min="1" max="9" value="1" required>
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text col-9">Number of Rows</span>
-                        <input type="number" id="rows" class="form-control col-3 text-center" min="2" max="10" value="5" required>
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text col-9">Time between numbers (ms)</span>
-                        <input type="number" id="time" class="form-control col-3 text-center" min="50" max="5000" step="50" value="500" required>
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text col-9">Include Subtractions</span>
-                        <div class="form-control col-3 text-center">
-                            <input class="form-check-input" type="checkbox" value="" id="subtractions">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Settings</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="setting_form">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text col-3" for="compliments">Subject</label>
+                            <select id="subject" name="subject" class="form-control" required>
+                                <option value="">Select Subject</option>
+                            </select>
                         </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text col-9">Speak Numbers</span>
-                        <div class="form-control col-3 text-center">
-                            <input class="form-check-input" type="checkbox" value="" id="speak">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text col-3">Level</span>
+                            <select id="level" name="level" class="form-control" required disabled>
+                                <option value="">Select Level</option>
+                            </select>
                         </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <label class="input-group-text col-6" for="voiceModel">Change Voice Model</label>
-                        <select class="form-select col-6" id="voiceModel">
-                            <option value="speech" selected>Voice Model 1</option>
-                            <option value="mespeak">Voice Model 2</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" id="settings_save" class="btn btn-success" data-bs-dismiss="modal">Save changes</button>
-            </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text col-3">Topic</span>
+                            <select id="topic" name="topic" class="form-control" required disabled>
+                                <option value="">Select Topic</option>
+                            </select>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text col-9">Time between numbers (ms)</span>
+                            <input type="number" id="time" class="form-control col-3 text-center" min="50" max="5000"
+                                step="50" value="500" required>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text col-9">Speak Numbers</span>
+                            <div class="form-control col-3 text-center">
+                                <input class="form-check-input" type="checkbox" value="" id="speak">
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="input-group-text col-6" for="voiceModel">Change Voice Model</label>
+                            <select class="form-select col-6" id="voiceModel">
+                                <option value="speech" selected>Voice Model 1</option>
+                                <option value="mespeak">Voice Model 2</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="settings_save" class="btn btn-success" data-bs-dismiss="modal">Save
+                        changes</button>
+                </div>
             </div>
         </div>
     </div>
@@ -117,6 +133,7 @@
         </div>
         <div class="offcanvas-body">
             <div class="entries">
+            </div>
         </div>
     </div>
 
@@ -126,6 +143,7 @@
     <script src="assets/jquery.validate.min.js"></script>
     <script src="./assets/mespeak/mespeak.js"></script>
     <script src="./assets/mespeak/mespeak-core.js"></script>
-    <script src="script.min.js" type="module"></script>
-  </body>
+    <script src="script.js" type="module"></script>
+</body>
+
 </html>
